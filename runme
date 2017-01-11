@@ -1,0 +1,3 @@
+#!/usr/bin/env dash
+
+ansible-playbook -v --diff -i hosts site.yaml
