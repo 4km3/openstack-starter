@@ -1,0 +1,5 @@
+---
+- name: Add OpenStack Newton repository
+  hosts: all
+  roles:
+    - openstack-apt-repo

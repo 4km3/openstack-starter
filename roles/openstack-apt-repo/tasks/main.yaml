@@ -1,0 +1,13 @@
+---
+- name: Add OpenStack pubkey
+  become: yes
+  apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 5EDB1B62EC4926EA
+
+- name: Add OpenStack Newton repository
+  become: yes
+  apt_repository:
+    repo: deb http://ubuntu-cloud.archive.canonical.com/ubuntu xenial-updates/newton main
+    state: present
+    update_cache: yes
