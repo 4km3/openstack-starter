@@ -1,4 +1,6 @@
 ---
+# Dependency already resolved by our current ubuntu template:
+# # apt install software-properties-common
 - name: Add OpenStack pubkey
   become: yes
   apt_key:
