@@ -1,0 +1,6 @@
+---
+- name: Deploy OpenStack python client
+  become: yes
+  apt:
+    name: python-openstackclient
+    state: present
