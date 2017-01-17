@@ -3,3 +3,8 @@
   hosts: all
   roles:
     - openstack-apt-repo
+
+- name: Add OpenStack Python client
+  hosts: controllers
+  roles:
+    - openstack-client
