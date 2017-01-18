@@ -10,3 +10,4 @@
     - openstack-client
     - mysql-server
     - rabbitmq-server
+    - memcached
