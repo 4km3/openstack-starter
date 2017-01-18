@@ -7,6 +7,7 @@
   with_items:
     - mariadb-server
     - python-pymysql
+    - python-mysqldb
 
 - name: Configure mysql server
   become: yes
