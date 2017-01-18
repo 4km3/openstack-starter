@@ -9,3 +9,4 @@
   roles:
     - openstack-client
     - mysql-server
+    - rabbitmq-server
