@@ -8,3 +8,4 @@
   hosts: controllers
   roles:
     - openstack-client
+    - mysql-server
