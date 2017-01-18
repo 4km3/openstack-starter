@@ -1,0 +1,64 @@
+---
+- name: Create keystone database
+  become: yes
+  mysql_db:
+    name: keystone
+    state: present
+
+- name: Create keystone user
+  become: yes
+  mysql_user:
+    name: keystone
+    host: "{{ item }}"
+    password: "{{ mysql_password }}"
+    priv: keystone.*:ALL
+    state: present
+  with_items:
+    - localhost
+    - '%'
+
+- name: Install keystone
+  become: yes
+  apt:
+    name: keystone
+    state: present
+
+- name: Identify controller host
+  set_fact:
+    controller_host: "{{ groups.controllers | first }}"
+
+- name: Configure keystone
+  become: yes
+  ini_file:
+    dest: /etc/keystone/keystone.conf
+    section: "{{ item.section }}"
+    option: "{{ item.option }}"
+    value: "{{ item.value }}"
+  with_items:
+    - section: database
+      option: connection
+      value: "mysql+pymysql://keystone:{{ mysql_password }}@{{ controller_host }}/keystone"
+    - section: token
+      option: provider
+      value: fernet
+  notify: restart keystone
+
+- name: Perform several keystone-manage tasks
+  become: yes
+  become_user: keystone
+  command: "keystone-manage {{ item }}"
+  with_items:
+    - db_sync
+    - fernet_setup
+      --keystone-user  keystone
+      --keystone-group keystone
+    - credential_setup
+      --keystone-user  keystone
+      --keystone-group keystone
+    - bootstrap
+      --bootstrap-password     {{ keystone_password }}
+      --bootstrap-admin-url    http://{{ controller_host }}:35357/v3/
+      --bootstrap-internal-url http://{{ controller_host }}:35357/v3/
+      --bootstrap-public-url   http://{{ controller_host }}:5000/v3/
+      --bootstrap-region-id    RegionOne
+  notify: restart keystone
