@@ -1,0 +1,20 @@
+---
+- name: Deploy mysql server
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - mariadb-server
+    - python-pymysql
+
+- name: Configure mysql server
+  become: yes
+  template:
+    src: "{{ item }}.j2"
+    dest: "/etc/mysql/mariadb.conf.d/{{ item }}"
+  with_items:
+    - 99-openstack.cnf
+  notify: restart mysql
+
+- meta: flush_handlers
