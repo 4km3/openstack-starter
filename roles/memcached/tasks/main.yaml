@@ -1,0 +1,17 @@
+---
+- name: Install Memcached
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - memcached
+    - python-memcache
+
+- name: Configure Memcached listen addr
+  become: yes
+  lineinfile:
+    dest: /etc/memcached.conf
+    regexp: ^-l
+    line: "-l {{ ansible_default_ipv4.address }}"
+  notify: restart memcached
