@@ -11,3 +11,4 @@
     - mysql-server
     - rabbitmq-server
     - memcached
+    - keystone
